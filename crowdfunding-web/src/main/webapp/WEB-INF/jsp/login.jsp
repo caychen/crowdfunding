@@ -8,9 +8,9 @@
 	<meta name="description" content="">
 	<meta name="keys" content="">
 	<meta name="author" content="">
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/login.css">
+	<link rel="stylesheet" href="${applicationScope.ctx}/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${applicationScope.ctx}/css/font-awesome.min.css">
+	<link rel="stylesheet" href="${applicationScope.ctx}/css/login.css">
 	<style>
 
 	</style>

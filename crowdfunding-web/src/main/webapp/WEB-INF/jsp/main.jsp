@@ -14,9 +14,9 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="${applicationScope.ctx}/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${applicationScope.ctx}/css/font-awesome.min.css">
+	<link rel="stylesheet" href="${applicationScope.ctx}/css/main.css">
 	<style>
 		.tree li {
 			list-style-type: none;
@@ -75,7 +75,7 @@
 						<span><i class="glyphicon glyphicon glyphicon-tasks"></i> 权限管理 <span class="badge" style="float:right">3</span></span>
 						<ul style="margin-top:10px;display:none;">
 							<li style="height:30px;">
-								<a href="user.html"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
+								<a href="user/"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
 							</li>
 							<li style="height:30px;">
 								<a href="role.html"><i class="glyphicon glyphicon-king"></i> 角色维护</a>
@@ -159,9 +159,9 @@
 		</div>
 	</div>
 </div>
-<script src="jquery/jquery-2.1.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="script/docs.min.js"></script>
+<script src="${applicationScope.ctx}/jquery/jquery-2.1.1.min.js"></script>
+<script src="${applicationScope.ctx}/bootstrap/js/bootstrap.min.js"></script>
+<script src="${applicationScope.ctx}/script/docs.min.js"></script>
 <script type="text/javascript">
 	$(function () {
 		$(".list-group-item").click(function(){

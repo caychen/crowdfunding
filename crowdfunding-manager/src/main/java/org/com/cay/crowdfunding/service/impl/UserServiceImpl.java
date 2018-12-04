@@ -1,6 +1,7 @@
 package org.com.cay.crowdfunding.service.impl;
 
-import org.com.cay.crowdfunding.dao.IUserDao;
+import com.github.pagehelper.PageHelper;
+import org.com.cay.crowdfunding.mapper.IUserMapper;
 import org.com.cay.crowdfunding.entity.User;
 import org.com.cay.crowdfunding.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author:       Caychen
@@ -20,28 +22,32 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
 
 	@Autowired
-	private IUserDao userDao;
+	private IUserMapper userMapper;
 
 	@Override
 	public List<User> queryAll() {
-		return userDao.queryAll();
+		return userMapper.queryBy(null);
+	}
+
+	@Override
+	public List<User> queryBy(String queryText) {
+		return userMapper.queryBy(queryText);
 	}
 
 	@Transactional
 	@Override
 	public void save(User user) {
-		userDao.insert(user);
-	}
-
-	@Override
-	@Transactional
-	public void saveWithException(User user) {
-		userDao.insert(user);
-		throw new RuntimeException("抛出异常...");
+		userMapper.insert(user);
 	}
 
 	@Override
 	public User queryForLogin(User user) {
-		return userDao.queryForLogin(user);
+		return userMapper.queryForLogin(user);
+	}
+
+	@Override
+	public List<User> queryPageInfo(String queryText, Integer pageNum, Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		return this.queryBy(queryText);
 	}
 }
