@@ -17,9 +17,9 @@ public interface IUserService {
 
 	List<User> queryBy(String queryText);
 
-	void save(User user);
-
 	User queryForLogin(User user);
 
 	List<User> queryPageInfo(String queryText, Integer pageNum, Integer pageSize);
+
+	void insert(User user);
 }

@@ -42,4 +42,21 @@ public class UserController {
 	public String index(){
 		return "user/index";
 	}
+
+	@GetMapping("/add")
+	public String toAddUser(){
+		return "user/add";
+	}
+
+	@PostMapping("/save")
+	@ResponseBody
+	public JsonResult save(User user){
+		try{
+			userService.insert(user);
+			return JsonResult.ok();
+		}catch (Exception e){
+			return JsonResult.error("用户保存失败: " + e.getMessage());
+		}
+
+	}
 }

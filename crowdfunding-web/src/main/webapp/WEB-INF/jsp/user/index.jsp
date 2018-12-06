@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
-	<meta name="author" content="">
+	<meta name="author" content="caychen">
 
 	<link rel="stylesheet" href="${applicationScope.ctx}/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="${applicationScope.ctx}/css/font-awesome.min.css">
@@ -139,7 +139,7 @@
 						<button type="button" class="btn btn-warning" id="queryBtn"><i class="glyphicon glyphicon-search"></i> 查询</button>
 					</form>
 					<button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
-					<button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='add.html'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
+					<button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='${ctx}/user/add'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
 					<br>
 					<hr style="clear:both;">
 					<div class="table-responsive">
@@ -179,7 +179,7 @@
 <script src="${applicationScope.ctx}/bootstrap-paginator/bootstrap-paginator.js"></script>
 <script src="${applicationScope.ctx}/layer/layer.js"></script>
 <script type="text/javascript">
-	var pageNum = 1, pageSize = 1;
+	var pageNum = 1, pageSize = 10;
 	$(function () {
 		$(".list-group-item").click(function(){
 			if ( $(this).find("ul") ) {
@@ -195,10 +195,7 @@
 		pageQuery(pageNum, pageSize);
 
 		$("#queryBtn").on('click', function(){
-			var queryText = $("#queryText").val();
-			if(queryText !== ''){
-				pageQuery(pageNum, pageSize);
-			}
+			pageQuery(pageNum, pageSize);
 		});
 	});
 	$("tbody .btn-success").click(function(){

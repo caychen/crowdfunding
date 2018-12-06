@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.com.cay.crowdfunding.mapper.IUserMapper">
+	<insert id="insert" parameterType="org.com.cay.crowdfunding.entity.User" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+		insert into t_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="username != null and username != ''">
+				username,
+			</if>
+			<if test="password != null and password != ''">
+				password,
+			</if>
+			<if test="nickname != null and nickname != ''">
+				nickname,
+			</if>
+			<if test="email != null and email != ''">
+				email,
+			</if>
+			<if test="createDate != null">
+				createDate,
+			</if>
+		</trim>
+		<trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+			<if test="username != null and username != ''">
+				#{username},
+			</if>
+			<if test="password != null and password != ''">
+				#{password},
+			</if>
+			<if test="nickname != null and nickname != ''">
+				#{nickname},
+			</if>
+			<if test="email != null and email != ''">
+				#{email},
+			</if>
+			<if test="createDate != null">
+				#{createDate},
+			</if>
+		</trim>
+	</insert>
 
 	<select id="queryBy" resultType="org.com.cay.crowdfunding.entity.User" parameterType="string">
 		SELECT * FROM t_user
@@ -9,5 +46,6 @@
 				and username like CONCAT('%',#{queryText},'%')
 			</if>
 		</where>
+		ORDER BY CREATEDATE DESC
 	</select>
 </mapper>

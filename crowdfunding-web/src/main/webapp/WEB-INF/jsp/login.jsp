@@ -7,7 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
 	<meta name="keys" content="">
-	<meta name="author" content="">
+	<meta name="author" content="caychen">
+
 	<link rel="stylesheet" href="${applicationScope.ctx}/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="${applicationScope.ctx}/css/font-awesome.min.css">
 	<link rel="stylesheet" href="${applicationScope.ctx}/css/login.css">
@@ -19,7 +20,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
-			<div><a class="navbar-brand" href="index.html" style="font-size:32px;">尚筹网-创意产品众筹平台</a></div>
+			<div><a class="navbar-brand" href="${ctx}/main" style="font-size:32px;">尚筹网-创意产品众筹平台</a></div>
 		</div>
 	</div>
 </nav>
@@ -57,9 +58,9 @@
 		<a class="btn btn-lg btn-success btn-block" onclick="dologin()" > 登录</a>
 	</form>
 </div>
-<script src="jquery/jquery-3.2.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="layer/layer.js"></script>
+<script src="${ctx}/jquery/jquery-3.2.1.min.js"></script>
+<script src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
+<script src="${ctx}/layer/layer.js"></script>
 <script>
 	function dologin() {
 		//非空校验
@@ -103,7 +104,7 @@
 			layer.msg(error.responseText, {time:5000, icon:5, shift:6}, function(){
 
 			});
-		})
+		});
 	}
 </script>
 </body>

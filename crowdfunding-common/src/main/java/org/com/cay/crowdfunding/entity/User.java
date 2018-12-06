@@ -2,6 +2,8 @@ package org.com.cay.crowdfunding.entity;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * Author:       Caychen
  * Class:        org.com.cay.crowdfunding.entity.User
@@ -21,4 +23,6 @@ public class User {
 	private String nickname;
 
 	private String email;
+
+	private Date createDate;
 }

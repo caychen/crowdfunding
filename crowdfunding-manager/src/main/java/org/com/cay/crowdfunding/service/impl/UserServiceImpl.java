@@ -1,15 +1,18 @@
 package org.com.cay.crowdfunding.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import org.com.cay.crowdfunding.mapper.IUserMapper;
 import org.com.cay.crowdfunding.entity.User;
+import org.com.cay.crowdfunding.mapper.IUserMapper;
 import org.com.cay.crowdfunding.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
+
 
 /**
  * Author:       Caychen
@@ -34,12 +37,6 @@ public class UserServiceImpl implements IUserService {
 		return userMapper.queryBy(queryText);
 	}
 
-	@Transactional
-	@Override
-	public void save(User user) {
-		userMapper.insert(user);
-	}
-
 	@Override
 	public User queryForLogin(User user) {
 		return userMapper.queryForLogin(user);
@@ -49,5 +46,15 @@ public class UserServiceImpl implements IUserService {
 	public List<User> queryPageInfo(String queryText, Integer pageNum, Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		return this.queryBy(queryText);
+	}
+
+	@Override
+	@Transactional
+	public void insert(User user) {
+		user.setCreateDate(new Date());
+		if(StringUtils.isEmpty(user.getNickname())) {
+			user.setNickname(user.getUsername());
+		}
+		userMapper.insert(user);
 	}
 }

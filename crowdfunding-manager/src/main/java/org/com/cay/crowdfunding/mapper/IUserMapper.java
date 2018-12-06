@@ -17,8 +17,6 @@ import java.util.List;
  */
 public interface IUserMapper {
 
-	@Insert("insert into t_user values(null, #{username})")
-	@Options(useGeneratedKeys = true, keyColumn = "id")
 	void insert(User user);
 
 	@Select("select * from t_user where username=#{username} and password=#{password}")

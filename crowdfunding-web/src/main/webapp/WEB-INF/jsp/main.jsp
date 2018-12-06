@@ -1,18 +1,11 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Cay
-  Date: 2018/11/30
-  Time: 20:35
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
-	<meta charset="GB18030">
+	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
-	<meta name="author" content="">
+	<meta name="author" content="caychen">
 
 	<link rel="stylesheet" href="${applicationScope.ctx}/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="${applicationScope.ctx}/css/font-awesome.min.css">
@@ -75,7 +68,7 @@
 						<span><i class="glyphicon glyphicon glyphicon-tasks"></i> 权限管理 <span class="badge" style="float:right">3</span></span>
 						<ul style="margin-top:10px;display:none;">
 							<li style="height:30px;">
-								<a href="user/"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
+								<a href="${ctx}/user/"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
 							</li>
 							<li style="height:30px;">
 								<a href="role.html"><i class="glyphicon glyphicon-king"></i> 角色维护</a>
