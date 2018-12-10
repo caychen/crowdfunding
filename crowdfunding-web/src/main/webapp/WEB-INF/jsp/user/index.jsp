@@ -138,7 +138,7 @@
 						</div>
 						<button type="button" class="btn btn-warning" id="queryBtn"><i class="glyphicon glyphicon-search"></i> 查询</button>
 					</form>
-					<button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
+					<button type="button" class="btn btn-danger" onclick="deleteUsers()" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
 					<button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='${ctx}/user/add'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
 					<br>
 					<hr style="clear:both;">
@@ -147,7 +147,7 @@
 							<thead>
 							<tr >
 								<th width="30">#</th>
-								<th width="30"><input type="checkbox"></th>
+								<th width="30"><input type="checkbox" id="selectAll"></th>
 								<th>昵称</th>
 								<th>名称</th>
 								<th>邮箱地址</th>
@@ -197,6 +197,13 @@
 		$("#queryBtn").on('click', function(){
 			pageQuery(pageNum, pageSize);
 		});
+
+		$("#selectAll").on('click', function(){
+			var flag = this.checked;
+			$("#userList :checkbox").each(function(){
+				this.checked = flag;
+			})
+		})
 	});
 	$("tbody .btn-success").click(function(){
 		window.location.href = "assignRole.html";
@@ -235,9 +242,9 @@
 					tableContent += '  <td>' + user.username+'</td>';
 					tableContent += '  <td>' + user.email + '</td>';
 					tableContent += '  <td>';
-					tableContent += '      <button type="button" onclick="goAssignPage('+user.id+')" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
-					tableContent += '      <button type="button" onclick="goUpdatePage('+user.id+')" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>';
-					tableContent += '	  <button type="button" onclick="deleteUser('+user.id+', \''+user.loginacct+'\')" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>';
+					tableContent += '      <button type="button" onclick="goAssignPage(' + user.id + ')" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
+					tableContent += '      <button type="button" onclick="goUpdatePage(' + user.id + ')" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>';
+					tableContent += '	  <button type="button" onclick="deleteUser(' + user.id + ', \'' + user.username + '\')" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>';
 					tableContent += '  </td>';
 					tableContent += '</tr>';
 				});
@@ -272,7 +279,80 @@
 			}
 		}, function(error){
 			layer.msg("分页查询失败...", {icon: 5, shift: 6, time: 2000}, function(){});
-		})
+		});
+	}
+
+	function goUpdatePage(id){
+		window.location.href="${ctx}/user/edit?id=" + id;
+	}
+
+	function deleteUser(id, username) {
+		layer.confirm("删除用户信息：【" + username + "】，是否继续？", {icon: 3, title: '提示'}, function(cindex){
+			//确认删除
+			var loadingIndex = null;
+			$.when($.ajax({
+				url:'${ctx}/user/delete/' + id,
+				type:'delete',
+				dataType:'json',
+				beforeSend: function () {
+					loadingIndex = layer.msg("处理中", {icon: 16});
+				}
+			})).then(function(response){
+				layer.close(loadingIndex);
+				if(response.code == 0){
+					layer.msg("用户信息删除成功", {time: 1000, icon: 6}, function(){
+						window.location.href = "${ctx}/user/";
+					});
+				}
+			}, function(error){
+				layer.msg("用户信息删除失败", {time: 2000, icon: 5, shift: 6}, function(){
+				});
+			});
+			layer.close(cindex);
+		}, function(cindex){
+			//取消删除
+			layer.close(cindex);
+		});
+
+	}
+
+	function deleteUsers(){
+		var boxes = $("#userList :checkbox:checked");
+		var ids = [];
+		boxes.each(function(){
+			ids.push($(this).val());
+		});
+		if(boxes.length == 0){
+			layer.msg("至少选择一项！", {time: 2000, icon: 5, shift: 6}, function(){
+			});
+		}else{
+			layer.confirm("确认删除用户信息？", {icon: 3, title: '提示'}, function(cindex){
+				//确认删除
+				var loadingIndex = null;
+				$.when($.ajax({
+					url:'${ctx}/user/batchdelete?ids=' + (ids.join(",")),
+					type:'delete',
+					dataType:'json',
+					beforeSend: function () {
+						loadingIndex = layer.msg("处理中", {icon: 16});
+					}
+				})).then(function(response){
+					layer.close(loadingIndex);
+					if(response.code == 0){
+						layer.msg("用户信息删除成功", {time: 1000, icon: 6}, function(){
+							window.location.href = "${ctx}/user/";
+						});
+					}
+				}, function(error){
+					layer.msg("用户信息删除失败", {time: 2000, icon: 5, shift: 6}, function(){
+					});
+				});
+				layer.close(cindex);
+			}, function(cindex){
+				//取消删除
+				layer.close(cindex);
+			});
+		}
 	}
 </script>
 </body>

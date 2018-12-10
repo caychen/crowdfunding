@@ -38,6 +38,37 @@
 			</if>
 		</trim>
 	</insert>
+	<update id="update" parameterType="org.com.cay.crowdfunding.entity.User">
+		update t_user
+		<trim prefix="set" suffixOverrides=",">
+			<if test="username != '' and username != null">
+				username = #{username},
+			</if>
+			<if test="nickname != '' and nickname != null">
+				nickname = #{nickname},
+			</if>
+			<if test="password != '' and password != null">
+				password = #{password},
+			</if>
+			<if test="email != '' and email != null">
+				email = #{email},
+			</if>
+		</trim>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	<delete id="batchDelete" parameterType="java.lang.Integer">
+		delete from t_user
+		<where>
+			<if test="ids != null and ids.size() > 0">
+				id in
+				<foreach collection="ids" open="(" close=")" separator="," item="id">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+	</delete>
 
 	<select id="queryBy" resultType="org.com.cay.crowdfunding.entity.User" parameterType="string">
 		SELECT * FROM t_user

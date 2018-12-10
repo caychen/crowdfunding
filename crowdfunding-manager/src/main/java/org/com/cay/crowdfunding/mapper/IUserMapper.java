@@ -1,7 +1,6 @@
 package org.com.cay.crowdfunding.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.com.cay.crowdfunding.entity.User;
@@ -23,4 +22,14 @@ public interface IUserMapper {
 	User queryForLogin(User user);
 
 	List<User> queryBy(@Param("queryText") String queryText);
+
+	@Select("select * from t_user where id = #{id}")
+	User queryById(Integer id);
+
+	@Delete("delete from t_user where id = #{id}")
+	void deleteById(Integer id);
+
+	void update(User user);
+
+	void batchDelete(@Param("ids") List<Integer> ids);
 }

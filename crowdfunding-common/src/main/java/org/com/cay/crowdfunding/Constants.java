@@ -10,4 +10,6 @@ package org.com.cay.crowdfunding;
 public class Constants {
 
 	public static String LOGIN_USERNAME = "loginUser";
+
+	public static String DEFAULT_PASSWORD = "123456";
 }

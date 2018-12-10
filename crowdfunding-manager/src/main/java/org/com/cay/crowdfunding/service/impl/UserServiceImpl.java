@@ -1,6 +1,7 @@
 package org.com.cay.crowdfunding.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import org.com.cay.crowdfunding.Constants;
 import org.com.cay.crowdfunding.entity.User;
 import org.com.cay.crowdfunding.mapper.IUserMapper;
 import org.com.cay.crowdfunding.service.IUserService;
@@ -11,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 /**
@@ -52,9 +53,31 @@ public class UserServiceImpl implements IUserService {
 	@Transactional
 	public void insert(User user) {
 		user.setCreateDate(new Date());
-		if(StringUtils.isEmpty(user.getNickname())) {
-			user.setNickname(user.getUsername());
-		}
+		user.setPassword(Constants.DEFAULT_PASSWORD);
 		userMapper.insert(user);
+	}
+
+	@Override
+	public User queryById(Integer id) {
+		return userMapper.queryById(id);
+	}
+
+	@Transactional
+	@Override
+	public void update(User user) {
+		userMapper.update(user);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Integer id) {
+		userMapper.deleteById(id);
+	}
+
+	@Override
+	@Transactional
+	public void batchDelete(List<String> idList) {
+		List<Integer> ids = idList.stream().map(id -> Integer.parseInt(id)).collect(Collectors.toList());
+		userMapper.batchDelete(ids);
 	}
 }

@@ -124,27 +124,27 @@
 			<ol class="breadcrumb">
 				<li><a href="#">首页</a></li>
 				<li><a href="#">数据列表</a></li>
-				<li class="active">新增</li>
+				<li class="active">修改</li>
 			</ol>
 			<div class="panel panel-default">
 				<div class="panel-heading">表单数据<div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
 				<div class="panel-body">
-					<form role="form">
+					<form role="form" id="userForm">
 						<div class="form-group">
 							<label for="username">登陆账号</label>
-							<input type="text" class="form-control" id="username" placeholder="请输入登陆账号">
+							<input type="text" class="form-control" id="username" placeholder="请输入登陆账号" value="${user.username}">
 						</div>
 						<div class="form-group">
 							<label for="nickname">用户名称</label>
-							<input type="text" class="form-control" id="nickname" placeholder="请输入用户名称">
+							<input type="text" class="form-control" id="nickname" placeholder="请输入用户名称" value="${user.nickname}">
 						</div>
 						<div class="form-group">
 							<label for="email">邮箱地址</label>
-							<input type="email" class="form-control" id="email" placeholder="请输入邮箱地址">
+							<input type="email" class="form-control" id="email" placeholder="请输入邮箱地址" value="${user.email}">
 							<p class="help-block label label-warning">请输入合法的邮箱地址, 格式为： xxxx@xxxx.com</p>
 						</div>
-						<button id="saveBtn" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> 新增</button>
-						<button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
+						<button id="saveBtn" type="button" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i> 修改</button>
+						<button id="resetBtn" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
 					</form>
 				</div>
 			</div>
@@ -226,7 +226,8 @@
 				data:{
 					username: username,
 					nickname: nickname,
-					email: email
+					email: email,
+					id: ${user.id}
 				},
 				beforeSend: function () {
 					loadingIndex = layer.msg("处理中", {icon: 16});
@@ -234,7 +235,7 @@
 			})).then(function (data) {
 				layer.close(loadingIndex);
 				if(data.code == 0){
-					layer.msg("用户保存成功", {time: 1000, icon: 6}, function(){
+					layer.msg("用户修改成功", {time: 1000, icon: 6}, function(){
 						window.location.href = "${ctx}/user/";
 					});
 				}else{
@@ -248,6 +249,10 @@
 				});
 			});
 		});
+		
+		$("#resetBtn").on('click', function () {
+			$("#userForm")[0].reset();
+		})
 	});
 </script>
 </body>

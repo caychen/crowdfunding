@@ -22,4 +22,12 @@ public interface IUserService {
 	List<User> queryPageInfo(String queryText, Integer pageNum, Integer pageSize);
 
 	void insert(User user);
+
+	User queryById(Integer id);
+
+	void update(User user);
+
+	void delete(Integer id);
+
+	void batchDelete(List<String> idList);
 }
