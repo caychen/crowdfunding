@@ -32,7 +32,7 @@
 				<li style="padding-top:8px;">
 					<div class="btn-group">
 						<button type="button" class="btn btn-default btn-success dropdown-toggle" data-toggle="dropdown">
-							<i class="glyphicon glyphicon-user"></i> ${sessionScope.loginUser.username} <span class="caret"></span>
+							<i class="glyphicon glyphicon-role"></i> ${sessionScope.loginrole.rolename} <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="#"><i class="glyphicon glyphicon-cog"></i> 个人设置</a></li>
@@ -67,10 +67,10 @@
 						<span><i class="glyphicon glyphicon glyphicon-tasks"></i> 权限管理 <span class="badge" style="float:right">3</span></span>
 						<ul style="margin-top:10px;">
 							<li style="height:30px;">
-								<a href="${ctx}/user/" style="color:red;"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
+								<a href="${ctx}/user/"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
 							</li>
 							<li style="height:30px;">
-								<a href="${ctx}/role/"><i class="glyphicon glyphicon-certificate"></i> 角色维护</a>
+								<a href="${ctx}/role/" style="color:red;"><i class="glyphicon glyphicon-certificate"></i> 角色维护</a>
 							</li>
 							<li style="height:30px;">
 								<a href="${ctx}/permission/"><i class="glyphicon glyphicon-lock"></i> 许可维护</a>
@@ -138,23 +138,21 @@
 						</div>
 						<button type="button" class="btn btn-warning" id="queryBtn"><i class="glyphicon glyphicon-search"></i> 查询</button>
 					</form>
-					<button type="button" class="btn btn-danger" onclick="deleteUsers()" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
-					<button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='${ctx}/user/add'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
+					<button type="button" class="btn btn-danger" onclick="deleteRoles()" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
+					<button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='${ctx}/role/add'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
 					<br>
 					<hr style="clear:both;">
 					<div class="table-responsive">
 						<table class="table  table-bordered">
 							<thead>
 							<tr >
-								<th width="30">#</th>
-								<th width="30"><input type="checkbox" id="selectAll"></th>
-								<th>昵称</th>
+								<th width="10">#</th>
+								<th width="10"><input type="checkbox" id="selectAll"></th>
 								<th>名称</th>
-								<th>邮箱地址</th>
 								<th width="100">操作</th>
 							</tr>
 							</thead>
-							<tbody id="userList">
+							<tbody id="roleList">
 
 							</tbody>
 							<tfoot>
@@ -200,7 +198,7 @@
 
 		$("#selectAll").on('click', function(){
 			var flag = this.checked;
-			$("#userList :checkbox").each(function(){
+			$("#roleList :checkbox").each(function(){
 				this.checked = flag;
 			})
 		})
@@ -215,7 +213,7 @@
 	function pageQuery(pageNum, pageSize){
 		var loadingIndex = null;
 		$.when($.ajax({
-			url:'${ctx}/user/query',
+			url:'${ctx}/role/query',
 			method:'post',
 			data:{
 				pageNum: pageNum,
@@ -231,25 +229,23 @@
 			if(data.code == 0){
 				//局部刷新页面
 				var pageInfo = data.data;
-				var userList = pageInfo.list;
+				var roleList = pageInfo.list;
 
 				var tableContent = '';
-				$.each(userList, function(index, user){
+				$.each(roleList, function(index, role){
 					tableContent += '<tr>';
 					tableContent += '  <td>' + (index + 1) + '</td>';
-					tableContent += '  <td><input type="checkbox" name="userid" value="' + user.id + '"></td>';
-					tableContent += '  <td>' + user.nickname + '</td>';
-					tableContent += '  <td>' + user.username+'</td>';
-					tableContent += '  <td>' + user.email + '</td>';
+					tableContent += '  <td><input type="checkbox" name="roleid" value="' + role.id + '"></td>';
+					tableContent += '  <td>' + role.name+'</td>';
 					tableContent += '  <td>';
-					tableContent += '      <button type="button" onclick="goAssignPage(' + user.id + ')" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
-					tableContent += '      <button type="button" onclick="goUpdatePage(' + user.id + ')" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>';
-					tableContent += '	  <button type="button" onclick="deleteUser(' + user.id + ', \'' + user.username + '\')" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>';
+					tableContent += '      <button type="button" onclick="goAssignPage(' + role.id + ')" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
+					tableContent += '      <button type="button" onclick="goUpdatePage(' + role.id + ')" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>';
+					tableContent += '	  <button type="button" onclick="deleteRole(' + role.id + ', \'' + role.name + '\')" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>';
 					tableContent += '  </td>';
 					tableContent += '</tr>';
 				});
 
-				$("#userList").html(tableContent);
+				$("#roleList").html(tableContent);
 
 				$(".pagination").bootstrapPaginator({
 					currentPage: pageInfo.pageNum,
@@ -283,19 +279,15 @@
 	}
 
 	function goUpdatePage(id){
-		window.location.href="${ctx}/user/edit?id=" + id;
+		window.location.href="${ctx}/role/edit?id=" + id;
 	}
 
-	function goAssignPage(id){
-		window.location.href="${ctx}/user/assign?id=" + id;
-	}
-
-	function deleteUser(id, username) {
-		layer.confirm("删除用户信息：【" + username + "】，是否继续？", {icon: 3, title: '提示'}, function(cindex){
+	function deleteRole(id, rolename) {
+		layer.confirm("删除角色信息：【" + rolename + "】，是否继续？", {icon: 3, title: '提示'}, function(cindex){
 			//确认删除
 			var loadingIndex = null;
 			$.when($.ajax({
-				url:'${ctx}/user/delete/' + id,
+				url:'${ctx}/role/delete/' + id,
 				type:'delete',
 				dataType:'json',
 				beforeSend: function () {
@@ -304,12 +296,12 @@
 			})).then(function(response){
 				layer.close(loadingIndex);
 				if(response.code == 0){
-					layer.msg("用户信息删除成功", {time: 1000, icon: 6}, function(){
-						window.location.href = "${ctx}/user/";
+					layer.msg("角色信息删除成功", {time: 1000, icon: 6}, function(){
+						window.location.href = "${ctx}/role/";
 					});
 				}
 			}, function(error){
-				layer.msg("用户信息删除失败", {time: 2000, icon: 5, shift: 6}, function(){
+				layer.msg("角色信息删除失败", {time: 2000, icon: 5, shift: 6}, function(){
 				});
 			});
 			layer.close(cindex);
@@ -320,8 +312,8 @@
 
 	}
 
-	function deleteUsers(){
-		var boxes = $("#userList :checkbox:checked");
+	function deleteRoles(){
+		var boxes = $("#roleList :checkbox:checked");
 		var ids = [];
 		boxes.each(function(){
 			ids.push($(this).val());
@@ -330,11 +322,11 @@
 			layer.msg("至少选择一项！", {time: 2000, icon: 5, shift: 6}, function(){
 			});
 		}else{
-			layer.confirm("确认删除用户信息？", {icon: 3, title: '提示'}, function(cindex){
+			layer.confirm("确认删除角色信息？", {icon: 3, title: '提示'}, function(cindex){
 				//确认删除
 				var loadingIndex = null;
 				$.when($.ajax({
-					url:'${ctx}/user/batchdelete?ids=' + (ids.join(",")),
+					url:'${ctx}/role/batchdelete?ids=' + (ids.join(",")),
 					type:'delete',
 					dataType:'json',
 					beforeSend: function () {
@@ -343,12 +335,12 @@
 				})).then(function(response){
 					layer.close(loadingIndex);
 					if(response.code == 0){
-						layer.msg("用户信息删除成功", {time: 1000, icon: 6}, function(){
-							window.location.href = "${ctx}/user/";
+						layer.msg("角色信息删除成功", {time: 1000, icon: 6}, function(){
+							window.location.href = "${ctx}/role/";
 						});
 					}
 				}, function(error){
-					layer.msg("用户信息删除失败", {time: 2000, icon: 5, shift: 6}, function(){
+					layer.msg("角色信息删除失败", {time: 2000, icon: 5, shift: 6}, function(){
 					});
 				});
 				layer.close(cindex);

@@ -7,24 +7,18 @@ import java.util.Date;
 
 /**
  * Author:       Caychen
- * Class:        org.com.cay.crowdfunding.entity.User
- * Date:         2018/11/29
+ * Class:        org.com.cay.crowdfunding.entity.Role
+ * Date:         2018/12/11
  * Version:      v1.0
  * Desc:
  */
 @Data
 @Accessors(chain = true)
-public class User {
+public class Role {
 
 	private Integer id;
 
-	private String username;
-
-	private String password;
-
-	private String nickname;
-
-	private String email;
+	private String name;
 
 	private Date createDate;
 

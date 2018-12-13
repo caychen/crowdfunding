@@ -19,6 +19,9 @@
 			<if test="createDate != null">
 				createDate,
 			</if>
+			<if test="updateDate != null">
+				updateDate,
+			</if>
 		</trim>
 		<trim prefix="VALUES(" suffix=")" suffixOverrides=",">
 			<if test="username != null and username != ''">
@@ -36,8 +39,12 @@
 			<if test="createDate != null">
 				#{createDate},
 			</if>
+			<if test="updateDate != null">
+				#{updateDate},
+			</if>
 		</trim>
 	</insert>
+
 	<update id="update" parameterType="org.com.cay.crowdfunding.entity.User">
 		update t_user
 		<trim prefix="set" suffixOverrides=",">
@@ -52,6 +59,9 @@
 			</if>
 			<if test="email != '' and email != null">
 				email = #{email},
+			</if>
+			<if test="updateDate != null">
+				updatedate = #{updateDate},
 			</if>
 		</trim>
 		<where>
@@ -70,6 +80,7 @@
 		</where>
 	</delete>
 
+
 	<select id="queryBy" resultType="org.com.cay.crowdfunding.entity.User" parameterType="string">
 		SELECT * FROM t_user
 		<where>
@@ -79,4 +90,38 @@
 		</where>
 		ORDER BY CREATEDATE DESC
 	</select>
+
+	<insert id="insertUserRoles" parameterType="map">
+		<!--<if test="roleIds != null and roleIds.size() > 0">
+			<foreach collection="roleIds" item="roleId" open="(" close=")" separator=",">
+				insert into t_user_role(userid, roleid)
+				select #{userId}, #{roleId} from dual
+				<where>
+					not exists(
+						select 1 from t_user_role where userid = #{userId} and roleid = #{roleId}
+					)
+				</where>
+			</foreach>
+		</if>-->
+		insert into t_user_role(userid, roleid)
+		values
+		<foreach collection="roleIds" item="roleId" separator=",">
+			(#{userId}, #{roleId})
+		</foreach>
+	</insert>
+
+	<delete id="deleteUserRoles" parameterType="map">
+		delete from t_user_role
+		<where>
+			<if test="userId != null">
+				and userid = #{userId}
+			</if>
+			<if test="roleIds != null and roleIds.size() > 0">
+				and roleid in
+				<foreach collection="roleIds" item="roleId" open="(" close=")" separator=",">
+					#{roleId}
+				</foreach>
+			</if>
+		</where>
+	</delete>
 </mapper>

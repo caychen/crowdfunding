@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -124,27 +125,35 @@
 			<ol class="breadcrumb">
 				<li><a href="#">首页</a></li>
 				<li><a href="#">数据列表</a></li>
-				<li class="active">修改</li>
+				<li class="active">分配角色</li>
 			</ol>
 			<div class="panel panel-default">
-				<div class="panel-heading">表单数据<div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
 				<div class="panel-body">
-					<form role="form" id="userForm">
+					<form id="roleForm" role="form" class="form-inline">
+						<input type="hidden" name="userId" value="${user.id}">
 						<div class="form-group">
-							<label for="username">登陆账号</label>
-							<input type="text" class="form-control" id="username" placeholder="请输入登陆账号" value="${user.username}">
+							<label>未分配角色列表</label><br>
+							<select id="leftList" name="unassignroleids" class="form-control" multiple size="10" style="width:200px;overflow-y:auto;">
+								<c:forEach items="${noRoleList}" var="role">
+									<option value="${role.id}">${role.name}</option>
+								</c:forEach>
+							</select>
 						</div>
 						<div class="form-group">
-							<label for="nickname">用户名称</label>
-							<input type="text" class="form-control" id="nickname" placeholder="请输入用户名称" value="${user.nickname}">
+							<ul>
+								<li id="left2Right" class="btn btn-default glyphicon glyphicon-chevron-right"></li>
+								<br>
+								<li id="right2Left" class="btn btn-default glyphicon glyphicon-chevron-left" style="margin-top:20px;"></li>
+							</ul>
 						</div>
-						<div class="form-group">
-							<label for="email">邮箱地址</label>
-							<input type="email" class="form-control" id="email" placeholder="请输入邮箱地址" value="${user.email}">
-							<p class="help-block label label-warning">请输入合法的邮箱地址, 格式为： xxxx@xxxx.com</p>
+						<div class="form-group" style="margin-left:40px;">
+							<label>已分配角色列表</label><br>
+							<select id="rightList" name="assignroleids" class="form-control" multiple size="10" style="width:200px;overflow-y:auto;">
+								<c:forEach items="${hasRoleList}" var="role">
+									<option value="${role.id}">${role.name}</option>
+								</c:forEach>
+							</select>
 						</div>
-						<button id="saveBtn" type="button" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i> 修改</button>
-						<button id="resetBtn" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
 					</form>
 				</div>
 			</div>
@@ -194,65 +203,68 @@
 			}
 		});
 
-		$("#saveBtn").on('click', function(){
-			var username = $("#username").val();
-			if(username == null || username === ''){
-				layer.msg("用户帐号不能为空，请输入", {time:2000, icon:5, shift:6}, function(){
+		$("#left2Right").on('click', function(){
+			var opts = $("#leftList :selected");
+			if(opts.length == 0){
+				layer.msg("请选择需要分配的角色", {time:2000, icon:5, shift:6}, function(){
 
 				});
-				return ;
-			}
+			}else{
 
-			var nickname = $("#nickname").val();
-			if(nickname == null || nickname === ''){
-				layer.msg("用户密码不能为空，请输入", {time:2000, icon:5, shift:6}, function(){
-
-				});
-				return;
-			}
-
-			var email = $("#email").val();
-			if(email == null || email === ''){
-				layer.msg("用户邮箱不能为空，请输入", {time:2000, icon:5, shift:6}, function(){
-
-				});
-				return;
-			}
-
-			var loadingIndex = null;
-			$.when($.ajax({
-				url:'${ctx}/user/save',
-				type:'post',
-				data:{
-					username: username,
-					nickname: nickname,
-					email: email,
-					id: ${user.id}
-				},
-				beforeSend: function () {
-					loadingIndex = layer.msg("处理中", {icon: 16});
-				}
-			})).then(function (data) {
-				layer.close(loadingIndex);
-				if(data.code == 0){
-					layer.msg("用户修改成功", {time: 1000, icon: 6}, function(){
-						window.location.href = "${ctx}/user/";
-					});
-				}else{
-					layer.msg(data.message, {time:2000, icon:5, shift:6}, function(){
+				$.when($.ajax({
+					url:'${ctx}/user/submit',
+					data:$("#roleForm").serialize(),
+					type:'post',
+					dataType:'json'
+				})).then(function(data){
+					if(data.code == 0){
+						$("#rightList").append(opts);
+						layer.msg("角色分配成功", {time:2000, icon:6}, function(){
+						});
+					}else{
+						layer.msg("角色分配失败", {time:2000, icon:5, shift:6}, function(){
+						});
+					}
+				}, function(error){
+					layer.msg(error.responseText, {time:5000, icon:5, shift:6}, function(){
 
 					});
-				}
-			}, function(error){
-				layer.msg(error.responseText, {time:5000, icon:5, shift:6}, function(){
-
 				});
-			});
+
+
+			}
 		});
-		
-		$("#resetBtn").on('click', function () {
-			$("#userForm")[0].reset();
-		})
+
+		$("#right2Left").on('click', function(){
+			var opts = $("#rightList :selected");
+			if(opts.length == 0){
+				layer.msg("请选择取消分配的角色", {time:2000, icon:5, shift:6}, function(){
+
+				});
+			}else{
+				$.when($.ajax({
+					url:'${ctx}/user/cancel',
+					data:$("#roleForm").serialize(),
+					type:'post',
+					dataType:'json'
+				})).then(function(data){
+					if(data.code == 0){
+						$("#leftList").append(opts);
+						layer.msg("角色取消成功", {time:2000, icon:6}, function(){
+						});
+					}else{
+						layer.msg("角色取消失败", {time:2000, icon:5, shift:6}, function(){
+						});
+					}
+				}, function(error){
+					layer.msg(error.responseText, {time:5000, icon:5, shift:6}, function(){
+
+					});
+				});
+
+
+			}
+		});
 	});
 </script>
 </body>

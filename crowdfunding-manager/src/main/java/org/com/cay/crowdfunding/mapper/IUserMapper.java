@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Select;
 import org.com.cay.crowdfunding.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author:           Caychen
@@ -32,4 +33,11 @@ public interface IUserMapper {
 	void update(User user);
 
 	void batchDelete(@Param("ids") List<Integer> ids);
+
+	void insertUserRoles(Map<String, Object> map);
+
+	void deleteUserRoles(Map<String, Object> map);
+
+	@Select("select roleid from t_user_role where userid = #{id}")
+	List<Integer> queryRoleIdsByUserId(Integer id);
 }

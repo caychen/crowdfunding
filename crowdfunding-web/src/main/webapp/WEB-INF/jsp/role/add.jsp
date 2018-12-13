@@ -29,7 +29,7 @@
 				<li style="padding-top:8px;">
 					<div class="btn-group">
 						<button type="button" class="btn btn-default btn-success dropdown-toggle" data-toggle="dropdown">
-							<i class="glyphicon glyphicon-user"></i> ${sessionScope.loginUser.username} <span class="caret"></span>
+							<i class="glyphicon glyphicon-user"></i> ${sessionScope.loginUser.rolename} <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="#"><i class="glyphicon glyphicon-cog"></i> 个人设置</a></li>
@@ -64,10 +64,10 @@
 						<span><i class="glyphicon glyphicon glyphicon-tasks"></i> 权限管理 <span class="badge" style="float:right">3</span></span>
 						<ul style="margin-top:10px;">
 							<li style="height:30px;">
-								<a href="${ctx}/user/" style="color:red;"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
+								<a href="${ctx}/user/"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
 							</li>
 							<li style="height:30px;">
-								<a href="${ctx}/role/"><i class="glyphicon glyphicon-certificate"></i> 角色维护</a>
+								<a href="${ctx}/role/" style="color:red;"><i class="glyphicon glyphicon-certificate"></i> 角色维护</a>
 							</li>
 							<li style="height:30px;">
 								<a href="${ctx}/permission/"><i class="glyphicon glyphicon-lock"></i> 许可维护</a>
@@ -124,27 +124,18 @@
 			<ol class="breadcrumb">
 				<li><a href="#">首页</a></li>
 				<li><a href="#">数据列表</a></li>
-				<li class="active">修改</li>
+				<li class="active">新增</li>
 			</ol>
 			<div class="panel panel-default">
 				<div class="panel-heading">表单数据<div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
 				<div class="panel-body">
-					<form role="form" id="userForm">
+					<form role="form">
 						<div class="form-group">
-							<label for="username">登陆账号</label>
-							<input type="text" class="form-control" id="username" placeholder="请输入登陆账号" value="${user.username}">
+							<label for="rolename">角色名称</label>
+							<input type="text" class="form-control" id="rolename" placeholder="请输入角色名称">
 						</div>
-						<div class="form-group">
-							<label for="nickname">用户名称</label>
-							<input type="text" class="form-control" id="nickname" placeholder="请输入用户名称" value="${user.nickname}">
-						</div>
-						<div class="form-group">
-							<label for="email">邮箱地址</label>
-							<input type="email" class="form-control" id="email" placeholder="请输入邮箱地址" value="${user.email}">
-							<p class="help-block label label-warning">请输入合法的邮箱地址, 格式为： xxxx@xxxx.com</p>
-						</div>
-						<button id="saveBtn" type="button" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i> 修改</button>
-						<button id="resetBtn" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
+						<button id="saveBtn" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> 新增</button>
+						<button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
 					</form>
 				</div>
 			</div>
@@ -195,39 +186,20 @@
 		});
 
 		$("#saveBtn").on('click', function(){
-			var username = $("#username").val();
-			if(username == null || username === ''){
-				layer.msg("用户帐号不能为空，请输入", {time:2000, icon:5, shift:6}, function(){
+			var rolename = $("#rolename").val();
+			if(rolename == null || rolename === ''){
+				layer.msg("角色名称不能为空，请输入", {time:2000, icon:5, shift:6}, function(){
 
 				});
 				return ;
 			}
 
-			var nickname = $("#nickname").val();
-			if(nickname == null || nickname === ''){
-				layer.msg("用户密码不能为空，请输入", {time:2000, icon:5, shift:6}, function(){
-
-				});
-				return;
-			}
-
-			var email = $("#email").val();
-			if(email == null || email === ''){
-				layer.msg("用户邮箱不能为空，请输入", {time:2000, icon:5, shift:6}, function(){
-
-				});
-				return;
-			}
-
 			var loadingIndex = null;
 			$.when($.ajax({
-				url:'${ctx}/user/save',
+				url:'${ctx}/role/save',
 				type:'post',
 				data:{
-					username: username,
-					nickname: nickname,
-					email: email,
-					id: ${user.id}
+					name: rolename,
 				},
 				beforeSend: function () {
 					loadingIndex = layer.msg("处理中", {icon: 16});
@@ -235,8 +207,8 @@
 			})).then(function (data) {
 				layer.close(loadingIndex);
 				if(data.code == 0){
-					layer.msg("用户修改成功", {time: 1000, icon: 6}, function(){
-						window.location.href = "${ctx}/user/";
+					layer.msg("角色保存成功", {time: 1000, icon: 6}, function(){
+						window.location.href = "${ctx}/role/";
 					});
 				}else{
 					layer.msg(data.message, {time:2000, icon:5, shift:6}, function(){
@@ -249,10 +221,6 @@
 				});
 			});
 		});
-		
-		$("#resetBtn").on('click', function () {
-			$("#userForm")[0].reset();
-		})
 	});
 </script>
 </body>

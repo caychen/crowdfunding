@@ -1,17 +1,17 @@
 package org.com.cay.crowdfunding.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import org.com.cay.crowdfunding.Constants;
+import org.com.cay.crowdfunding.constant.Constants;
 import org.com.cay.crowdfunding.entity.User;
 import org.com.cay.crowdfunding.mapper.IUserMapper;
 import org.com.cay.crowdfunding.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -52,7 +52,7 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	@Transactional
 	public void insert(User user) {
-		user.setCreateDate(new Date());
+		user.setCreateDate(new Date()).setUpdateDate(new Date());
 		user.setPassword(Constants.DEFAULT_PASSWORD);
 		userMapper.insert(user);
 	}
@@ -65,6 +65,7 @@ public class UserServiceImpl implements IUserService {
 	@Transactional
 	@Override
 	public void update(User user) {
+		user.setUpdateDate(new Date());
 		userMapper.update(user);
 	}
 
@@ -79,5 +80,20 @@ public class UserServiceImpl implements IUserService {
 	public void batchDelete(List<String> idList) {
 		List<Integer> ids = idList.stream().map(id -> Integer.parseInt(id)).collect(Collectors.toList());
 		userMapper.batchDelete(ids);
+	}
+
+	@Override
+	public void insertUserRoles(Map<String, Object> map) {
+		userMapper.insertUserRoles(map);
+	}
+
+	@Override
+	public void deleteUserRoles(Map<String, Object> map) {
+		userMapper.deleteUserRoles(map);
+	}
+
+	@Override
+	public List<Integer> queryRoleIdsByUserId(Integer id) {
+		return userMapper.queryRoleIdsByUserId(id);
 	}
 }

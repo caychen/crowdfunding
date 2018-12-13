@@ -3,6 +3,7 @@ package org.com.cay.crowdfunding.service;
 import org.com.cay.crowdfunding.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author:           Caychen
@@ -30,4 +31,10 @@ public interface IUserService {
 	void delete(Integer id);
 
 	void batchDelete(List<String> idList);
+
+	void insertUserRoles(Map<String, Object> map);
+
+	void deleteUserRoles(Map<String, Object> map);
+
+	List<Integer> queryRoleIdsByUserId(Integer id);
 }

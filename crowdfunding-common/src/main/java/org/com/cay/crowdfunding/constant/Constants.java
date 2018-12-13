@@ -1,8 +1,8 @@
-package org.com.cay.crowdfunding;
+package org.com.cay.crowdfunding.constant;
 
 /**
  * Author:       Caychen
- * Class:        org.com.cay.crowdfunding.Constants
+ * Class:        org.com.cay.crowdfunding.constant.Constants
  * Date:         2018/11/30
  * Version:      v1.0
  * Desc:

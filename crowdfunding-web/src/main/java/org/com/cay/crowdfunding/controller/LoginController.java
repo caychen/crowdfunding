@@ -1,6 +1,6 @@
 package org.com.cay.crowdfunding.controller;
 
-import org.com.cay.crowdfunding.Constants;
+import org.com.cay.crowdfunding.constant.Constants;
 import org.com.cay.crowdfunding.common.JsonResult;
 import org.com.cay.crowdfunding.entity.User;
 import org.com.cay.crowdfunding.service.IUserService;
