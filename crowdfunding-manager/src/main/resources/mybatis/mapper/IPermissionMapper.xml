@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.com.cay.crowdfunding.mapper.IPermissionMapper">
+
+	<insert id="insert" parameterType="org.com.cay.crowdfunding.entity.Permission">
+		insert into t_permission
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null and name != ''">
+				name,
+			</if>
+			<if test="url != null and url != ''">
+				url,
+			</if>
+			<if test="pid != null and pid != ''">
+				pid,
+			</if>
+		</trim>
+		<trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+			<if test="name != null and name != ''">
+				#{name},
+			</if>
+			<if test="url != null and url != ''">
+				#{url},
+			</if>
+			<if test="pid != null and pid != ''">
+				#{pid},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="update" parameterType="org.com.cay.crowdfunding.entity.Permission">
+		update t_permission
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != '' and name != null">
+				name = #{name},
+			</if>
+			<if test="url != '' and url != null">
+				url = #{url},
+			</if>
+			<if test="pid != '' and pid != null">
+				pid = #{pid},
+			</if>
+		</trim>
+		<where>
+			id = #{id}
+		</where>
+	</update>
+</mapper>

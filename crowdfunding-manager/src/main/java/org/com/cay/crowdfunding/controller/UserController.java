@@ -12,7 +12,6 @@ import org.com.cay.crowdfunding.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -74,12 +73,14 @@ public class UserController {
 	public JsonResult save(User user){
 		log.info("当前用户对象: [{}]", user);
 		try{
-			if(StringUtils.isEmpty(user.getId())){
+			if(user.getId() == null){
 				userService.insert(user);
+				log.info("用户保存成功");
 			}else{
 				userService.update(user);
+				log.info("用户更新成功");
 			}
-			log.info("用户保存成功");
+
 			return JsonResult.ok();
 		}catch (Exception e){
 			log.error("用户保存失败，原因：", e);

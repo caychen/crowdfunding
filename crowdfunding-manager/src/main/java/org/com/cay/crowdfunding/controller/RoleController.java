@@ -9,7 +9,6 @@ import org.com.cay.crowdfunding.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,12 +62,13 @@ public class RoleController {
 	public JsonResult save(Role role){
 		log.info("当前角色对象: [{}]", role);
 		try{
-			if(StringUtils.isEmpty(role.getId())){
+			if(role.getId() == null){
 				roleService.insert(role);
+				log.info("角色保存成功");
 			}else{
 				roleService.update(role);
+				log.info("角色更新成功");
 			}
-			log.info("角色保存成功");
 			return JsonResult.ok();
 		}catch (Exception e){
 			log.error("角色保存失败，原因：", e);

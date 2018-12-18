@@ -1,5 +1,9 @@
 package org.com.cay.crowdfunding.service;
 
+import org.com.cay.crowdfunding.entity.Permission;
+
+import java.util.List;
+
 /**
  * Author:           Caychen
  * Interface:        org.com.cay.crowdfunding.service.IPermissionService
@@ -8,4 +12,18 @@ package org.com.cay.crowdfunding.service;
  * Desc:
  */
 public interface IPermissionService {
+
+	Permission queryRootPermission();
+
+	List<Permission> queryChildPermissionsByPid(Integer pid);
+
+	List<Permission> queryAll();
+
+	void insert(Permission permission);
+
+	Permission queryById(Integer id);
+
+	void update(Permission permission);
+
+	void delete(Integer id);
 }

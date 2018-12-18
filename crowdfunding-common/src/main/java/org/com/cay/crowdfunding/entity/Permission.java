@@ -1,9 +1,9 @@
 package org.com.cay.crowdfunding.entity;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,5 +31,5 @@ public class Permission {
 
 	private String icon;
 
-	private List<Permission> children = new ArrayList<>();
+	private List<Permission> children = Lists.newArrayList();
 }
