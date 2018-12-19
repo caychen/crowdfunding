@@ -5,6 +5,7 @@ import org.com.cay.crowdfunding.mapper.IPermissionMapper;
 import org.com.cay.crowdfunding.service.IPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class PermissionServiceImpl implements IPermissionService {
 	}
 
 	@Override
+	@Transactional
 	public void insert(Permission permission) {
 		permissionMapper.insert(permission);
 	}
@@ -47,11 +49,13 @@ public class PermissionServiceImpl implements IPermissionService {
 	}
 
 	@Override
+	@Transactional
 	public void update(Permission permission) {
 		permissionMapper.update(permission);
 	}
 
 	@Override
+	@Transactional
 	public void delete(Integer id) {
 		permissionMapper.delete(id);
 	}

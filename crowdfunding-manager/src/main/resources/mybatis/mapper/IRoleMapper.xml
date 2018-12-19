@@ -60,4 +60,18 @@
 			</if>
 		</where>
 	</select>
+
+	<insert id="doAssign" parameterType="map">
+		<if test="permissionIds != null and permissionIds.size() > 0">
+			<foreach collection="permissionIds" item="permissionId">
+				insert into t_role_permission(roleid, permissionid)
+				select #{roleId}, #{permissionId} from dual
+				<where>
+					not exists(
+					select 1 from t_role_permission where roleid = #{roleId} and permissionId = #{permissionId}
+					);
+				</where>
+			</foreach>
+		</if>
+	</insert>
 </mapper>

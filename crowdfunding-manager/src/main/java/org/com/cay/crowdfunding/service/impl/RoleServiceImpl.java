@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +40,12 @@ public class RoleServiceImpl implements IRoleService {
 	@Override
 	public List<Role> queryAll() {
 		return this.queryBy(null);
+	}
+
+	@Override
+	@Transactional
+	public void doAssign(Map<String, Object> map) {
+		roleMapper.doAssign(map);
 	}
 
 	@Override

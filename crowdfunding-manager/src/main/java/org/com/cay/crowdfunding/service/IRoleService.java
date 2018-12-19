@@ -3,6 +3,7 @@ package org.com.cay.crowdfunding.service;
 import org.com.cay.crowdfunding.entity.Role;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author:           Caychen
@@ -28,4 +29,6 @@ public interface IRoleService {
 	List<Role> queryBy(String queryText);
 
 	List<Role> queryAll();
+
+	void doAssign(Map<String, Object> map);
 }

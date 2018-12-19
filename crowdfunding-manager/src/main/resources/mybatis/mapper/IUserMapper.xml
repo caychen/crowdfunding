@@ -93,13 +93,13 @@
 
 	<insert id="insertUserRoles" parameterType="map">
 		<!--<if test="roleIds != null and roleIds.size() > 0">
-			<foreach collection="roleIds" item="roleId" open="(" close=")" separator=",">
+			<foreach collection="roleIds" item="roleId">
 				insert into t_user_role(userid, roleid)
 				select #{userId}, #{roleId} from dual
 				<where>
 					not exists(
 						select 1 from t_user_role where userid = #{userId} and roleid = #{roleId}
-					)
+					);
 				</where>
 			</foreach>
 		</if>-->
