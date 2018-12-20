@@ -5,7 +5,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.com.cay.crowdfunding.common.JsonResult;
+import org.com.cay.crowdfunding.entity.Permission;
 import org.com.cay.crowdfunding.entity.Role;
+import org.com.cay.crowdfunding.service.IPermissionService;
 import org.com.cay.crowdfunding.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +32,9 @@ public class RoleController {
 
 	@Autowired
 	private IRoleService roleService;
+
+	@Autowired
+	private IPermissionService permissionService;
 
 	@ResponseBody
 	@PostMapping({"/query"})
@@ -141,4 +146,38 @@ public class RoleController {
 			return JsonResult.error("许可分配有误：" + e.getMessage());
 		}
 	}
+
+	@PostMapping("/loadpermission")
+	@ResponseBody
+	public Object loadPermission(Integer roleId) {
+		List<Integer> rolePermissionIds = permissionService.queryPermissionIdsByRoleId(roleId);
+
+		//先查询所有节点，然后通过pid来将当前节点添加到父节点的下级节点集合中
+		List<Permission> permissionList = Lists.newArrayList();
+		List<Permission> permissions = permissionService.queryAll();
+		Map<Integer, Permission> permissionMap = Maps.newHashMap();
+
+		//拼装map
+		permissions.stream().forEach(permission -> {
+			if (rolePermissionIds.contains(permission.getId())) {
+				permission.setChecked(true);
+			}
+			permissionMap.put(permission.getId(), permission);
+
+		});
+
+		permissions.stream().forEach(permission -> {
+			if (permission.getPid() == 0) {
+				//顶级节点
+				permissionList.add(permission);
+			} else {
+				//将当前节点添加到父节点上
+				Permission parent = permissionMap.get(permission.getPid());
+				parent.getChildren().add(permission);
+			}
+		});
+		return permissionList;
+	}
+
+
 }

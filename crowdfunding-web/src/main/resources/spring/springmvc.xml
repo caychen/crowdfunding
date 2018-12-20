@@ -26,6 +26,7 @@
 
 	<mvc:view-controller path="/login" view-name="login"/>
 	<mvc:view-controller path="/main" view-name="main"/>
+	<mvc:view-controller path="/authInvalid" view-name="authinvalid"/>
 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -37,4 +38,39 @@
 		<property name="maxUploadSize" value="2097152"/>
 		<property name="resolveLazily" value="true"/>
 	</bean>
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/login"/>
+			<mvc:exclude-mapping path="/doLogin"/>
+			<mvc:exclude-mapping path="/authInvalid"/>
+			<mvc:exclude-mapping path="/bootstrap/**"/>
+			<mvc:exclude-mapping path="/bootstrap-paginator/**"/>
+			<mvc:exclude-mapping path="/css/**"/>
+			<mvc:exclude-mapping path="/fonts/**"/>
+			<mvc:exclude-mapping path="/img/**"/>
+			<mvc:exclude-mapping path="/jquery/**"/>
+			<mvc:exclude-mapping path="/layer/**"/>
+			<mvc:exclude-mapping path="/script/**"/>
+			<mvc:exclude-mapping path="/ztree/**"/>
+			<bean class="org.com.cay.crowdfunding.interceptor.LoginInterceptor" />
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/login"/>
+			<mvc:exclude-mapping path="/doLogin"/>
+			<mvc:exclude-mapping path="/authInvalid"/>
+			<mvc:exclude-mapping path="/bootstrap/**"/>
+			<mvc:exclude-mapping path="/bootstrap-paginator/**"/>
+			<mvc:exclude-mapping path="/css/**"/>
+			<mvc:exclude-mapping path="/fonts/**"/>
+			<mvc:exclude-mapping path="/img/**"/>
+			<mvc:exclude-mapping path="/jquery/**"/>
+			<mvc:exclude-mapping path="/layer/**"/>
+			<mvc:exclude-mapping path="/script/**"/>
+			<mvc:exclude-mapping path="/ztree/**"/>
+			<bean class="org.com.cay.crowdfunding.interceptor.AuthInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
 </beans>

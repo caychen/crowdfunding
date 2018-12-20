@@ -1,6 +1,7 @@
 package org.com.cay.crowdfunding.service;
 
 import org.com.cay.crowdfunding.entity.Permission;
+import org.com.cay.crowdfunding.entity.User;
 
 import java.util.List;
 
@@ -26,4 +27,8 @@ public interface IPermissionService {
 	void update(Permission permission);
 
 	void delete(Integer id);
+
+	List<Integer> queryPermissionIdsByRoleId(Integer roleId);
+
+	List<Permission> queryUserPermission(User dbUser);
 }

@@ -1,6 +1,7 @@
 package org.com.cay.crowdfunding.service.impl;
 
 import org.com.cay.crowdfunding.entity.Permission;
+import org.com.cay.crowdfunding.entity.User;
 import org.com.cay.crowdfunding.mapper.IPermissionMapper;
 import org.com.cay.crowdfunding.service.IPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,15 @@ public class PermissionServiceImpl implements IPermissionService {
 	@Transactional
 	public void delete(Integer id) {
 		permissionMapper.delete(id);
+	}
+
+	@Override
+	public List<Integer> queryPermissionIdsByRoleId(Integer roleId) {
+		return permissionMapper.queryPermissionIdsByRoleId(roleId);
+	}
+
+	@Override
+	public List<Permission> queryUserPermission(User dbUser) {
+		return permissionMapper.queryUserPermission(dbUser);
 	}
 }

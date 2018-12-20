@@ -45,4 +45,15 @@
 			id = #{id}
 		</where>
 	</update>
+
+	<select id="queryUserPermission" resultType="org.com.cay.crowdfunding.entity.Permission" parameterType="org.com.cay.crowdfunding.entity.User">
+		select * from t_permission
+		where id in (
+			select permissionid from t_role_permission
+			where roleId in (
+				select roleid from t_user_role
+				  where userid = #{id}
+			)
+		)
+	</select>
 </mapper>

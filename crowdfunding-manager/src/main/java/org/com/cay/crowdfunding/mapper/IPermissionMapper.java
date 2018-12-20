@@ -3,6 +3,7 @@ package org.com.cay.crowdfunding.mapper;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 import org.com.cay.crowdfunding.entity.Permission;
+import org.com.cay.crowdfunding.entity.User;
 
 import java.util.List;
 
@@ -33,4 +34,9 @@ public interface IPermissionMapper {
 
 	@Delete("delete from t_permission where id = #{id}")
 	void delete(Integer id);
+
+	@Select("select permissionId from t_role_permission where roleid = #{roleId}")
+	List<Integer> queryPermissionIdsByRoleId(Integer roleId);
+
+	List<Permission> queryUserPermission(User user);
 }
