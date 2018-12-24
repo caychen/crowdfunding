@@ -124,4 +124,16 @@
 			</if>
 		</where>
 	</delete>
+
+	<delete id="batchDeleteRolesByUserIds" parameterType="map">
+		delete from t_user_role
+		<where>
+			<if test="userIds != null and userIds.size() > 0">
+				and userid in
+				<foreach collection="userIds" item="userId" open="(" close=")" separator=",">
+					#{userId}
+				</foreach>
+			</if>
+		</where>
+	</delete>
 </mapper>

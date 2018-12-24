@@ -1,6 +1,8 @@
 package org.com.cay.crowdfunding.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.com.cay.crowdfunding.entity.Role;
 import org.com.cay.crowdfunding.mapper.IRoleMapper;
 import org.com.cay.crowdfunding.service.IRoleService;
@@ -71,6 +73,11 @@ public class RoleServiceImpl implements IRoleService {
 	@Transactional
 	public void delete(Integer id) {
 		roleMapper.deleteById(id);
+
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("roleIds", Lists.newArrayList(id));
+		roleMapper.batchDeleteUsersByRoleIds(map);
+		roleMapper.batchDeletePermissionsByRoleIds(map);
 	}
 
 	@Override
@@ -78,5 +85,10 @@ public class RoleServiceImpl implements IRoleService {
 	public void batchDelete(List<String> idList) {
 		List<Integer> ids = idList.stream().map(id -> Integer.parseInt(id)).collect(Collectors.toList());
 		roleMapper.batchDelete(ids);
+
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("roleIds", ids);
+		roleMapper.batchDeleteUsersByRoleIds(map);
+		roleMapper.batchDeletePermissionsByRoleIds(map);
 	}
 }

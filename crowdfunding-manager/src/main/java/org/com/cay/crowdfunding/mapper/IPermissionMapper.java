@@ -39,4 +39,7 @@ public interface IPermissionMapper {
 	List<Integer> queryPermissionIdsByRoleId(Integer roleId);
 
 	List<Permission> queryUserPermission(User user);
+
+	@Delete("delete from t_role_permission where permissionId = #{id}")
+	void deleteRolesByPermissionId(Integer id);
 }

@@ -59,6 +59,9 @@ public class PermissionServiceImpl implements IPermissionService {
 	@Transactional
 	public void delete(Integer id) {
 		permissionMapper.delete(id);
+
+		//关联数据的删除
+		permissionMapper.deleteRolesByPermissionId(id);
 	}
 
 	@Override

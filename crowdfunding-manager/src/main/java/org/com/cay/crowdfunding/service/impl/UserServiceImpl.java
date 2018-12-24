@@ -1,6 +1,8 @@
 package org.com.cay.crowdfunding.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.com.cay.crowdfunding.constant.Constants;
 import org.com.cay.crowdfunding.entity.User;
 import org.com.cay.crowdfunding.mapper.IUserMapper;
@@ -73,6 +75,11 @@ public class UserServiceImpl implements IUserService {
 	@Transactional
 	public void delete(Integer id) {
 		userMapper.deleteById(id);
+
+		//删除关联表数据
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("userIds", Lists.newArrayList(id));
+		userMapper.batchDeleteRolesByUserIds(map);
 	}
 
 	@Override
@@ -80,14 +87,20 @@ public class UserServiceImpl implements IUserService {
 	public void batchDelete(List<String> idList) {
 		List<Integer> ids = idList.stream().map(id -> Integer.parseInt(id)).collect(Collectors.toList());
 		userMapper.batchDelete(ids);
+
+		Map<String, Object> map = Maps.newHashMap();
+		map.put("userIds", ids);
+		userMapper.batchDeleteRolesByUserIds(map);
 	}
 
 	@Override
+	@Transactional
 	public void insertUserRoles(Map<String, Object> map) {
 		userMapper.insertUserRoles(map);
 	}
 
 	@Override
+	@Transactional
 	public void deleteUserRoles(Map<String, Object> map) {
 		userMapper.deleteUserRoles(map);
 	}

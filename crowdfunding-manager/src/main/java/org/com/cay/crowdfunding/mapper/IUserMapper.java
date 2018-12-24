@@ -40,4 +40,6 @@ public interface IUserMapper {
 
 	@Select("select roleid from t_user_role where userid = #{id}")
 	List<Integer> queryRoleIdsByUserId(Integer id);
+
+	void batchDeleteRolesByUserIds(Map<String, Object> map);
 }

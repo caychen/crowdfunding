@@ -74,4 +74,28 @@
 			</foreach>
 		</if>
 	</insert>
+
+	<delete id="batchDeleteUsersByRoleIds" parameterType="map">
+		delete from t_user_role
+		<where>
+			<if test="roleIds != null and roleIds.size() > 0">
+				and roleid in
+				<foreach collection="roleIds" item="roleId" open="(" close=")" separator=",">
+					#{roleId}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+
+	<delete id="batchDeletePermissionsByRoleIds" parameterType="map">
+		delete from t_role_permission
+		<where>
+			<if test="roleIds != null and roleIds.size() > 0">
+				and roleid in
+				<foreach collection="roleIds" item="roleId" open="(" close=")" separator=",">
+					#{roleId}
+				</foreach>
+			</if>
+		</where>
+	</delete>
 </mapper>

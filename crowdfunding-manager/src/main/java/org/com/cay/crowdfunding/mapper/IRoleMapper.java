@@ -32,4 +32,8 @@ public interface IRoleMapper {
 	void batchDelete(@Param("ids") List<Integer> ids);
 
 	void doAssign(Map<String, Object> map);
+
+	void batchDeleteUsersByRoleIds(Map<String, Object> map);
+
+	void batchDeletePermissionsByRoleIds(Map<String, Object> map);
 }
